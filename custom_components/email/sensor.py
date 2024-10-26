@@ -259,7 +259,7 @@ def find_carrier(tracking_number, email_domain):
         elif (length > 25):
             link = TRACKING_NUMBER_URLS["dhl"]
             carrier = "DHL"
-        elif (isNumber and length > 12 and length < 14)
+        elif (isNumber and length > 12 and length < 15):
             link = TRACKING_NUMBER_URLS['dpd_de']
             carrier = "DPD _DE"
         else:
