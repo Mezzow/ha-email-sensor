@@ -64,6 +64,8 @@ from .parsers.sylvane import ATTR_SYLVANE, EMAIL_DOMAIN_SYLVANE, parse_sylvane
 from .parsers.adafruit import ATTR_ADAFRUIT, EMAIL_DOMAIN_ADAFRUIT, parse_adafruit
 from .parsers.thriftbooks import ATTR_THRIFT_BOOKS, EMAIL_DOMAIN_THRIFT_BOOKS, parse_thrift_books
 from .parsers.lowes import ATTR_LOWES, EMAIL_DOMAIN_LOWES, parse_lowes
+from .parsers.hermes_de import ATTR_HERMES_DE, EMAIL_DOMAIN_HERMES_DE, parse_hermes_de
+
 
 from .parsers.generic import ATTR_GENERIC, EMAIL_DOMAIN_GENERIC, parse_generic
 
@@ -116,6 +118,7 @@ parsers = [
     (ATTR_ADAFRUIT, EMAIL_DOMAIN_ADAFRUIT, parse_adafruit),
     (ATTR_THRIFT_BOOKS, EMAIL_DOMAIN_THRIFT_BOOKS, parse_thrift_books),
     (ATTR_LOWES, EMAIL_DOMAIN_LOWES, parse_lowes),
+    (ATTR_HERMES_DE, EMAIL_DOMAIN_HERMES_DE, parse_hermes_de),
     
     (ATTR_GENERIC, EMAIL_DOMAIN_GENERIC, parse_generic),
 ]
@@ -143,6 +146,7 @@ TRACKING_NUMBER_URLS = {
   'dhl_de': 'https://www.dhl.de/de/privatkunden/pakete-empfangen/verfolgen.html?piececode=',
   'swiss_post': 'https://www.swisspost.ch/track?formattedParcelCodes=',
   'unknown': 'https://www.google.com/search?q=',
+  'hermes_de': 'https://www.myhermes.de/empfangen/sendungsverfolgung/sendungsinformation#',
 }
 
    
@@ -204,13 +208,16 @@ def find_carrier(tracking_number, email_domain):
         carrier = "USPS"
     elif email_domain == EMAIL_DOMAIN_DHL_DE:
         link = TRACKING_NUMBER_URLS["dhl_de"]
-        carrier = "DHL"
+        carrier = "DHL DE"
     elif email_domain == EMAIL_DOMAIN_DHL:
         link = TRACKING_NUMBER_URLS["dhl"]
         carrier = "DHL"
     elif email_domain == EMAIL_DOMAIN_SWISS_POST:
         link = TRACKING_NUMBER_URLS["swiss_post"]
         carrier = "Swiss Post"
+    elif email_domain == EMAIL_DOMAIN_HERMES_DE:
+        link = TRACKING_NUMBER_URLS["hermes_de"]
+        carrier = "Hermes DE"
     
     # regex tracking number
     elif re.search(usps_regex, tracking_number) != None:
