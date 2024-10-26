@@ -5,7 +5,7 @@ from ..const import EMAIL_ATTR_BODY
 
 _LOGGER = logging.getLogger(__name__)
 ATTR_HERMES_DE = 'hermes_de'
-EMAIL_DOMAIN_HERMES_DE = 'paketankuendigung.myhermes.de'
+EMAIL_DOMAIN_HERMES_DE = 'myhermes.de'
 
 # Precompile regex pattern for better performance
 TRACKING_NUMBER_PATTERN = re.compile(r'Sendungsnummer\s+(H\d+)')
