@@ -16,22 +16,22 @@ def parse_amazon_de(email):
     soup = BeautifulSoup(email[EMAIL_ATTR_BODY], 'html.parser')
 
     # see if it's an shipped order email
-    order_number_match = re.search('Order: #(.*?)\n', email[EMAIL_ATTR_BODY])
+    order_number_match = re.search('Order: #(.*?)\n', email[EMAIL_ATTR_BODY]) or re.search('Bestellnummer: #(.*?)\n', email[EMAIL_ATTR_BODY])
     if not order_number_match:
-        order_number_match = re.search('Your Amazon.de order of (.*?) has been dispatched!', email[EMAIL_ATTR_SUBJECT])
+        order_number_match = re.search('Your Amazon.de order of (.*?) has been dispatched!', email[EMAIL_ATTR_SUBJECT]) or re.search('Deine Amazon.de-Bestellung mit (.*?) wurde versandt!', email[EMAIL_ATTR_SUBJECT])
     if not order_number_match:
         return tracking_numbers
 
     order_number = order_number_match.group(1)
 
     # find the link that has 'track your package' text
-    linkElements = soup.find_all('a')
-    for linkElement in linkElements:
-        if not re.search(r'track your package', linkElement.text, re.IGNORECASE):
+    link_elements = soup.find_all('a')
+    for link_element in link_elements:
+        if not re.search(r'track your package', link_element.text, re.IGNORECASE) and not re.search(r'Verfolge deine(n) Artikel', link_element.text, re.IGNORECASE):
             continue
         
         # if found we no get url and check for duplicates
-        link = linkElement.get('href')
+        link = link_element.get('href')
 
         # make sure we dont have dupes
         order_numbers = list(map(lambda x: x['tracking_number'], tracking_numbers))
