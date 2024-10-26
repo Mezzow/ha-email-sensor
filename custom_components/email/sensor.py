@@ -65,6 +65,7 @@ from .parsers.adafruit import ATTR_ADAFRUIT, EMAIL_DOMAIN_ADAFRUIT, parse_adafru
 from .parsers.thriftbooks import ATTR_THRIFT_BOOKS, EMAIL_DOMAIN_THRIFT_BOOKS, parse_thrift_books
 from .parsers.lowes import ATTR_LOWES, EMAIL_DOMAIN_LOWES, parse_lowes
 from .parsers.hermes_de import ATTR_HERMES_DE, EMAIL_DOMAIN_HERMES_DE, parse_hermes_de
+from .parsers.dpd_de import ATTR_DPD_DE, EMAIL_DOMAIN_DPD_DE, parse_dpd_de
 
 
 from .parsers.generic import ATTR_GENERIC, EMAIL_DOMAIN_GENERIC, parse_generic
@@ -119,6 +120,7 @@ parsers = [
     (ATTR_THRIFT_BOOKS, EMAIL_DOMAIN_THRIFT_BOOKS, parse_thrift_books),
     (ATTR_LOWES, EMAIL_DOMAIN_LOWES, parse_lowes),
     (ATTR_HERMES_DE, EMAIL_DOMAIN_HERMES_DE, parse_hermes_de),
+    (ATTR_DPD_DE, EMAIL_DOMAIN_DPD_DE, parse_dpd_de),
     
     (ATTR_GENERIC, EMAIL_DOMAIN_GENERIC, parse_generic),
 ]
@@ -147,6 +149,7 @@ TRACKING_NUMBER_URLS = {
   'swiss_post': 'https://www.swisspost.ch/track?formattedParcelCodes=',
   'unknown': 'https://www.google.com/search?q=',
   'hermes_de': 'https://www.myhermes.de/empfangen/sendungsverfolgung/sendungsinformation#',
+  'dpd_de': 'https://tracking.dpd.de/status/de_DE/parcel/',
 }
 
    
@@ -171,10 +174,16 @@ fedex_pattern = [
     '^[0-9]{12}$',
     '^[0-9]{22}$'
 ]
+dpd_de_pattern = [
+    '^[0-9]{13}$',
+    '^[0-9]{14}$'
+]
 
 usps_regex = "(" + ")|(".join(usps_pattern) + ")"
 fedex_regex = "(" + ")|(".join(fedex_pattern) + ")"
 ups_regex = "(" + ")|(".join(ups_pattern) + ")"
+dpd_de_regex = "(" + ")|(".join(dpd_de_pattern) + ")"
+
 
 def find_carrier(tracking_number, email_domain):
     _LOGGER.debug(f'find_carrier email_domain: {email_domain} {tracking_number}')
@@ -218,6 +227,9 @@ def find_carrier(tracking_number, email_domain):
     elif email_domain == EMAIL_DOMAIN_HERMES_DE:
         link = TRACKING_NUMBER_URLS["hermes_de"]
         carrier = "Hermes DE"
+    elif email_domain == EMAIL_DOMAIN_DPD_DE:
+        link = TRACKING_NUMBER_URLS["dpd_de"]
+        carrier = "DPD DE"
     
     # regex tracking number
     elif re.search(usps_regex, tracking_number) != None:
@@ -229,6 +241,9 @@ def find_carrier(tracking_number, email_domain):
     elif re.search(fedex_regex, tracking_number) != None:
         link = TRACKING_NUMBER_URLS["fedex"]
         carrier = 'FedEx'
+    elif re.search(dpd_de_regex, tracking_number) != None:
+        link = TRACKING_NUMBER_URLS["dpd_de"]
+        carrier = "DPD DE"
         
     # try one more time
     else:
@@ -244,6 +259,9 @@ def find_carrier(tracking_number, email_domain):
         elif (length > 25):
             link = TRACKING_NUMBER_URLS["dhl"]
             carrier = "DHL"
+        elif (isNumber and length > 12 and length < 14)
+            link = TRACKING_NUMBER_URLS['dpd_de']
+            carrier = "DPD _DE"
         else:
             link = TRACKING_NUMBER_URLS["unknown"]
             carrier = email_domain
