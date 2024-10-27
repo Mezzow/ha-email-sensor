@@ -29,9 +29,9 @@ def parse_generic(email):
     #     if tracking_number not in tracking_numbers:
     #         tracking_numbers.append(tracking_number)
 
-    matches = re.findall(DPD_DE_TRACKING_NUMBER_REGEX, email[EMAIL_ATTR_BODY])
-    for tracking_number in matches:
-        if tracking_number not in tracking_numbers:
-            tracking_numbers.append(tracking_number)
+    # matches = re.findall(DPD_DE_TRACKING_NUMBER_REGEX, email[EMAIL_ATTR_BODY])
+    # for tracking_number in matches:
+    #     if tracking_number not in tracking_numbers:
+    #         tracking_numbers.append(tracking_number)
             
     return tracking_numbers

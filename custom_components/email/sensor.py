@@ -241,9 +241,9 @@ def find_carrier(tracking_number, email_domain):
     elif re.search(fedex_regex, tracking_number) != None:
         link = TRACKING_NUMBER_URLS["fedex"]
         carrier = 'FedEx'
-    elif re.search(dpd_de_regex, tracking_number) != None:
-        link = TRACKING_NUMBER_URLS["dpd_de"]
-        carrier = "DPD DE"
+    # elif re.search(dpd_de_regex, tracking_number) != None:
+    #     link = TRACKING_NUMBER_URLS["dpd_de"]
+    #     carrier = "DPD DE"
         
     # try one more time
     else:
@@ -259,9 +259,9 @@ def find_carrier(tracking_number, email_domain):
         elif (length > 25):
             link = TRACKING_NUMBER_URLS["dhl"]
             carrier = "DHL"
-        elif (isNumber and length > 12 and length < 15):
-            link = TRACKING_NUMBER_URLS['dpd_de']
-            carrier = "DPD _DE"
+        # elif (isNumber and length > 12 and length < 15):
+        #     link = TRACKING_NUMBER_URLS['dpd_de']
+        #     carrier = "DPD _DE"
         else:
             link = TRACKING_NUMBER_URLS["unknown"]
             carrier = email_domain
